@@ -29,12 +29,24 @@
 <script src="../js/jquery-3.2.1.min.js"></script>
 <script src="../js/echarts.min.js"></script>
 <script>
-    $(function () {
-        initData();
-    });
+    var dep = null;
+    var team = null;
+    var group = null;
+
+    // $(function () {
+    //     initData(dep,team,group);
+    // });
 
     //生成数据
-    function initData() {
+    function initData(dep,team,group) {
+
+        //判断显示部门/团队/小组数据
+
+
+        // var legendData = ['甲', '乙','丙'];//todo 前三个月份
+        // var bgColorList = ['#FBB730', '#31BDF2','#6197fb'];
+        // var axisLabel = ['化学', '数学', '地理', '物理', '英语', '音乐', '语文', '历史', '美术', '生物', '信息技术', '政治', '体育'];//todo
+        // var seriesValue = [];
         var legendData = [];//todo 前三个月份
         var bgColorList = ['#FBB730', '#31BDF2','#6197fb'];
         var axisLabel = [];//todo
@@ -43,10 +55,18 @@
         var secondMonthData = [];
         var threeMonthData = [];
 
+        var data = {
+            dep:dep,
+            team:team,
+            group:group
+        }
         $.ajax({
             type:"GET",
             url:encodeURI("../lmyTest/test3"),
             dataType:"json",
+            data:{
+                "ajaxParam":JSON.stringify(data)
+            },
             async:false,
             success:function (root) {
                 // debugger;
@@ -115,9 +135,7 @@
             };
             seriesValue.push(seriesDataVal);
         }
-
         buildChart(legendData, axisLabel, seriesValue);
-
     }
 
     //生成Echarts图形
@@ -183,7 +201,53 @@
         };
 
         echart.setOption(option);
+        echart.on('click',function(object){
+            console.info(object);
+            console.info(object.name);
+            // dep = null;//object
+            // team = null;
+            // group = null;
+            if (dep == null || dep == undefined) {
+                dep = object.name;
+            }else if (team == null || team == undefined) {
+                team = object.name;
+            }else {
+                group = object.name;
+            }
+            echart.dispose(dom);
+            initData(dep,team,group);
+        });
     }
 </script>
+
+<script type="text/javascript">
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    initData(dep,team,group);
+    // drillDown.initChart(myChart,option);
+
+    $('#return-button').on('click',function(object){
+        console.info(object);
+        console.info(dep);
+        console.info(team);
+        console.info(group);
+        if (dep == null || dep == undefined){
+            dep = null;
+            team = null;
+            group = null;
+        } else if (team == null || team == undefined){
+            dep = null;
+            team = null;
+            group = null;
+        }else {
+            team = null;
+        }
+        var dom = document.getElementById("container");
+        var echart = echarts.init(dom);
+        echart.dispose(dom);
+        initData(dep,team,group);
+    });
+</script>
+
 </body>
 </html>
