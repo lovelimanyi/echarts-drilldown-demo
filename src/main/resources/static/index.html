@@ -1,0 +1,28 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+查看创建效果2
+
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script>
+    $(function () {
+        initData();
+    });
+    function initData(){
+        $.ajax({
+            type:"GET",
+            url : "../test/test2", // 此处可以替换为你的接口地址
+            dataType : 'json',
+            success : function (root){
+                console.info(root);
+
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+
+
+
+
+1、
+（必须配置，否则报错：
+Failed to configure a DataSource: 'url' attribute is not specified and no em）
+
+server.port=8081
+
+spring.datasource.url=jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8
+spring.datasource.username=root
+spring.datasource.password=123456
+
+2
+Whitelabel Error Page
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+Sun Jun 16 10:50:33 CST 2019
+There was an unexpected error (type=Not Found, status=404).
+No message available
+
+报错原因：没有加    @Controller
+
+
+
+3
+直接访问，http://localhost:8080/，报2种的错，需要添加controller及方法后，访问就可以。
+
+
+
+
+
