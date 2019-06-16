@@ -35,17 +35,64 @@
 
     //生成数据
     function initData() {
-        var legendData = ['甲', '乙','丙'];//todo 前三个月份
+        var legendData = [];//todo 前三个月份
         var bgColorList = ['#FBB730', '#31BDF2','#6197fb'];
-        var axisLabel = ['化学', '数学', '地理', '物理', '英语', '音乐', '语文', '历史', '美术', '生物', '信息技术', '政治', '体育'];//todo
+        var axisLabel = [];//todo
         var seriesValue = [];
+        var firstMonthData = [];
+        var secondMonthData = [];
+        var threeMonthData = [];
 
+        $.ajax({
+            type:"GET",
+            url:encodeURI("../lmyTest/test3"),
+            dataType:"json",
+            async:false,
+            success:function (root) {
+                // debugger;
+                var data = root.data;
+                legendData = data.legendData;
+                console.info(legendData);
+
+                axisLabel = data.axisLabel;
+
+                var dep_team_group_data_1 = data.month_1;
+                console.info(dep_team_group_data_1);
+                for (var key in dep_team_group_data_1){
+                    console.info("key:"+ key + ",score:"+dep_team_group_data_1[key]);
+                    firstMonthData.push(dep_team_group_data_1[key]);
+                }
+                var dep_team_group_data_2 = data.month_2;
+                console.info(dep_team_group_data_2);
+                for (var key in dep_team_group_data_2){
+                    console.info("key:"+ key + ",score:"+dep_team_group_data_2[key]);
+                    secondMonthData.push(dep_team_group_data_2[key]);
+                }
+                var dep_team_group_data_3 = data.month_3;
+                console.info(dep_team_group_data_3);
+                for (var key in dep_team_group_data_3){
+                    console.info("key:"+ key + ",score:"+dep_team_group_data_3[key]);
+                    threeMonthData.push(dep_team_group_data_3[key]);
+                }
+            }
+        });
+        // debugger;
         for (var i = 0; i < legendData.length; i++) {
             var arrData = [];
-            var seriesDataVal = null;
-            for (var j = 0; j < axisLabel.length; j++) {
-                arrData.push(Math.floor(Math.random() * 100));
+            // for (var j = 0; j < axisLabel.length; j++) {
+            //     arrData.push(Math.floor(Math.random() * 100));
+            // }
+            if (i==0){
+                arrData = firstMonthData;
             }
+            if (i==1){
+                arrData = secondMonthData;
+            }
+            if (i==2){
+                arrData = threeMonthData;
+            }
+
+            var seriesDataVal = null;
             seriesDataVal = {
                 barWidth: 10,//柱状条宽度
                 name:legendData[i],
@@ -115,7 +162,11 @@
             xAxis: [{
                 min: 0,
                 type: 'category', //纵向柱状图，若需要为横向，则此处值为'value'， 下面 yAxis 的type值为'category'
-                data: axisLabel
+                data: axisLabel,
+                axisLabel:{
+                    interval:0,
+                    rotate:60
+                }
             }],
             yAxis: [{
                 min: 0,
